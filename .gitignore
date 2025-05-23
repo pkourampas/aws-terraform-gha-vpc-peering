@@ -4,3 +4,6 @@
 # Terraform state files
 *.tfstate
 *.tfstate.*
+
+# Terraform lock file
+.terraform.*
