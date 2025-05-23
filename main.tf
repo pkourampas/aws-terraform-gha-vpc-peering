@@ -34,14 +34,18 @@ module "vpc_dr" {
 # ----- Create Main VPC IGW -----
 module "main_vpc_igw" {
   source = "./modules/igw"
-  aws_vpc_id = module.vpc_main.vpc_id
+  aws_vpc_id = module.vpc_main.aws_vpc_id
   aws_vpc_igw_name = "main vpc igw"
 }
 
 # ----- Create Dr VPC IGW -----
 module "dr_vpc_igw" {
   source = "./modules/igw"
-  aws_vpc_id = module.vpc_dr.vpc_id
+  aws_vpc_id = module.vpc_dr.aws_vpc_id
   aws_vpc_igw_name = "dr vpc igw"
+
+  providers = {
+    aws = aws.dr
+  }
 }
 
