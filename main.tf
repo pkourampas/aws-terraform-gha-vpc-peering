@@ -38,26 +38,35 @@ module "main_vpc_igw" {
   aws_vpc_igw_name = "main vpc igw"
 }
 
+
+# ----- Create a Public Subnet in Main VPC -----
+
 # Allow access to the list of AWS Availability zones
-data "aws_availability_zones" "available" {
+data "aws_availability_zones" "main" {
   state = "available"
 }
 
-# ----- Create a Public Subnet in Main VPC -----
 module "main_vpc_public_subnet" {
   source = "./modules/subnets"
   aws_vpc_id = module.vpc_main.aws_vpc_id
-  availability_zone = data.aws_availability_zones.available.names[0]
+  availability_zone = data.aws_availability_zones.main.names[0]
   subnet_cidr = cidrsubnet(module.vpc_main.aws_vpc_cidr, 8, 0)
   public_ip_on_launch = true
   subnet_name = "main vpc public subnet"
 }
 
 # ----- Create a Private Subnet in Dr VPC -----
+
+# Allow access to the list of AWS Availability zones
+data "aws_availability_zones" "dr" {
+  provider = aws.dr
+  state = "available"
+}
+
 module "dr_vpc_private_subnet" {
   source = "./modules/subnets"
   aws_vpc_id = module.vpc_dr.aws_vpc_id
-  availability_zone = data.aws_availability_zones.available.names[0]
+  availability_zone = data.aws_availability_zones.dr.names[0]
   subnet_cidr = cidrsubnet(module.vpc_dr.aws_vpc_cidr, 8, 0)
   public_ip_on_launch = false
   subnet_name = "dr vpc private subnet"
