@@ -76,3 +76,13 @@ module "dr_vpc_private_subnet" {
   }
 
 }
+
+module "main_vpc_public_route_table" {
+  source = "./modules/public_route_table"
+  aws_vpc_id = module.vpc_main.aws_vpc_id
+  cidr_block = "0.0.0.0/0"
+  gateway_id = module.main_vpc_igw.vpc_igw_id
+  aws_public_route_table_name = "main vpc public subnet"
+  aws_public_subnet_id = module.main_vpc_public_subnet.subnet_id
+  aws_route_table_id = public_route_table_id
+}
