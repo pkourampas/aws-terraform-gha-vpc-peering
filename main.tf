@@ -82,7 +82,24 @@ module "main_vpc_public_route_table" {
   aws_vpc_id = module.vpc_main.aws_vpc_id
   cidr_block = "0.0.0.0/0"
   gateway_id = module.main_vpc_igw.vpc_igw_id
-  aws_public_route_table_name = "main vpc public subnet"
+  aws_public_route_table_name = "main vpc public route table"
   aws_public_subnet_id = module.main_vpc_public_subnet.subnet_id
-  aws_route_table_id = module.main_vpc_public_route_table.public_route_table_id
+  aws_route_table_id = module.main_vpc_public_route_table.route_table_id
 }
+
+
+module "dr_vpc_private_route_table" {
+  source = "./modules/public_route_table"
+  aws_vpc_id = module.vpc_dr.aws_vpc_id
+  cidr_block = var.aws_dr_vpc_cidr
+  gateway_id = "local"
+  aws_public_route_table_name = "dr vpc private route table"
+  aws_public_subnet_id = module.dr_vpc_private_subnet.subnet_id
+  aws_route_table_id = module.dr_vpc_private_route_table.route_table_id
+
+  providers = {
+    aws = aws.dr
+  }
+
+}
+
