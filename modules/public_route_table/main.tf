@@ -11,7 +11,7 @@ resource "aws_route_table" "route_table" {
   }
 }
 
-resource "aws_route_table_association" "name" {
+resource "aws_route_table_association" "public_rt_association" {
   subnet_id = var.aws_public_subnet_id
   route_table_id = var.aws_route_table_id
 }
