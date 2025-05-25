@@ -1,7 +1,7 @@
 resource "aws_route_table" "route_table" {
   vpc_id = var.aws_vpc_id
 
-  route = {
+  route {
     cidr_block = var.cidr_block
     gateway_id = var.gateway_id
   }
