@@ -4,7 +4,7 @@ provider "aws" {
 
 provider "aws" {
   alias = "dr"
-  region = var.aws_dr_vpc_region 
+  region = var.aws_dr_vpc_region
 }
 
 # ----- Create Main VPC -----
