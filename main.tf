@@ -84,6 +84,5 @@ module "main_vpc_public_route_table" {
   gateway_id = module.main_vpc_igw.vpc_igw_id
   aws_public_route_table_name = "main vpc public subnet"
   aws_public_subnet_id = module.main_vpc_public_subnet.subnet_id
-  aws_route_table_id = module.main_vpc_public_route_table.aws_route_table.route_table.id
+  aws_route_table_id = module.main_vpc_public_route_table.public_route_table_id
 }
-
