@@ -115,7 +115,7 @@ module "main_vpc_sg" {
   ingress_rules = [
     { from_port = 80, to_port = 80, ip_protocol = "tcp", cidr_block = var.my_public_ipv4 },
     { from_port = 22, to_port = 22, ip_protocol = "tcp", cidr_block = var.my_public_ipv4 },
-    {from_port = 0, to_port = 0, ip_protocol = "icmp", cidr_block = var.my_public_ipv4 }
+    {from_port = 8, to_port = 0, ip_protocol = "icmp", cidr_block = var.my_public_ipv4 }    # 8 echo, 0 echo reply url: https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
   ]
 
   egress_rules = [
@@ -155,4 +155,46 @@ module "main_instance" {
   instance_name = "main vpc public subnet instance" 
   key_name = "my_ec2_key"
   public_key_path = "~/.ssh/id_rsa.pub"
+}
+
+
+# ----- DR VPC EC2 Instance -----
+
+# --- AWS AMI FILTER ---
+data "aws_ami" "dr_vpc_latest_amazon_linux" {
+  most_recent = true
+
+  filter {
+    name = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name = "architecture"
+    values = ["x86_64"]
+  }
+
+  owners = ["amazon"]
+
+  provider = aws.dr
+}
+
+
+module "dr_instance" {
+  source = "./modules/ec2"
+  instance_ami = data.aws_ami.dr_vpc_latest_amazon_linux.id
+  instance_type = "t2.small"
+  instance_az = data.aws_availability_zones.dr.names[0]
+  associate_public_ip = false
+  instance_subnet = module.dr_vpc_private_subnet.subnet_id
+  instance_tenancy = "default"
+  vpc_sg_group_id = [module.    main_vpc_sg.security_group_id] ## Need to create a vpc sg
+  instance_name = "dr vpc private subnet instance" 
+  key_name = "my_ec2_key"
+  public_key_path = "~/.ssh/id_rsa.pub"
+
+  providers = {
+    aws = aws.dr
+  }
+
 }
