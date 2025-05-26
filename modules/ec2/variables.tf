@@ -10,3 +10,9 @@ variable "instance_tenancy" {}
 variable "vpc_sg_group_id" {
   type = list(string)
 }
+variable "key_name" {
+  type = string
+}
+variable "public_key_path" {
+  type = string
+}

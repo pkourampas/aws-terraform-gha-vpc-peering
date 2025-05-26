@@ -151,4 +151,6 @@ module "main_instance" {
   instance_tenancy = "default"
   vpc_sg_group_id = [module.main_vpc_sg.security_group_id]
   instance_name = "main vpc public subnet instance" 
+  key_name = "my_ec2_key"
+  public_key_path = "~/.ssh/id_rsa.pub"
 }

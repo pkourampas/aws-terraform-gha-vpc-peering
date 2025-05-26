@@ -20,4 +20,5 @@ variable "aws_dr_vpc_cidr" {
 
 variable "my_public_ipv4" {
   type = string
+  default = "209.107.216.141"
 }
