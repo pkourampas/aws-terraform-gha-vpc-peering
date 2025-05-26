@@ -77,6 +77,7 @@ module "dr_vpc_private_subnet" {
 
 }
 
+# ----- Main vpc route table -----
 module "main_vpc_public_route_table" {
   source = "./modules/route_table"
   aws_vpc_id = module.vpc_main.aws_vpc_id
@@ -87,7 +88,7 @@ module "main_vpc_public_route_table" {
   aws_route_table_id = module.main_vpc_public_route_table.route_table_id
 }
 
-
+# ----- Dr vpc route table -----
 module "dr_vpc_private_route_table" {
   source = "./modules/route_table"
   aws_vpc_id = module.vpc_dr.aws_vpc_id
@@ -103,3 +104,51 @@ module "dr_vpc_private_route_table" {
 
 }
 
+# ----- main vpc Security Group & Instance -----
+module "main_vpc_sg" {
+  source = "./modules/sg"
+  sg_name = "ec2-instance-sg"
+  sg_desc = "SG for EC2 instance in the public subnet of the main VPC"
+  aws_vpc_id = module.vpc_main.aws_vpc_id
+  
+  ingress_rules = [
+    { from_port = 80, to_port = 80, ip_protocol = "tcp", cidr_block = var.my_public_ipv4 },
+    { from_port = 22, to_port = 22, ip_protocol = "tcp", cidr_block = var.my_public_ipv4 }
+  ]
+
+  egress_rules = [
+    { from_port = 0, to_port = 0, ip_protocol = "-1", cidr_block = var.my_public_ipv4 }
+  ]
+}
+
+## ----- EC2 Instance -----
+
+# ----- AWS AMI FILTER -----
+data "aws_ami" "main_vpc_latest_amazon_linux" {
+  most_recent = true
+
+  filter {
+    name = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name = "architecture"
+    values = ["x86_64"]
+  }
+
+  owners = ["amazon"]
+}
+
+
+module "main_instance" {
+  source = "./modules/ec2"
+  instance_ami = data.aws_ami.main_vpc_latest_amazon_linux.id
+  instance_type = "t2.small"
+  instance_az = data.aws_availability_zones.main.names[0]
+  associate_public_ip = true
+  instance_subnet = module.main_vpc_public_subnet.subnet_id
+  instance_tenancy = "default"
+  vpc_sg_group_id = [module.main_vpc_sg.security_group_id]
+  instance_name = "main vpc public subnet instance" 
+}

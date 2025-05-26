@@ -17,3 +17,7 @@ variable "aws_dr_vpc_cidr" {
   type = string
   default = "172.20.0.0/16"
 }
+
+variable "my_public_ipv4" {
+  type = string
+}
