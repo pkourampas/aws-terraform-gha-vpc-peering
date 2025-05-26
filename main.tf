@@ -110,10 +110,12 @@ module "main_vpc_sg" {
   sg_name = "ec2-instance-sg"
   sg_desc = "SG for EC2 instance in the public subnet of the main VPC"
   aws_vpc_id = module.vpc_main.aws_vpc_id
+  security_group_name_tag = "main_vpc_public_subnet_sg"
   
   ingress_rules = [
     { from_port = 80, to_port = 80, ip_protocol = "tcp", cidr_block = var.my_public_ipv4 },
-    { from_port = 22, to_port = 22, ip_protocol = "tcp", cidr_block = var.my_public_ipv4 }
+    { from_port = 22, to_port = 22, ip_protocol = "tcp", cidr_block = var.my_public_ipv4 },
+    {from_port = 0, to_port = 0, ip_protocol = "icmp", cidr_block = var.my_public_ipv4 }
   ]
 
   egress_rules = [

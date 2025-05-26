@@ -3,6 +3,10 @@ resource "aws_security_group" "sg" {
   description = var.sg_desc
   vpc_id = var.aws_vpc_id
 
+  tags = {
+    Name = var.security_group_name_tag
+  }
+
 }
 
 resource "aws_vpc_security_group_ingress_rule" "sg_ingress_rule" {

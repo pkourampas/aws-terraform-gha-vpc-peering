@@ -27,3 +27,5 @@ variable "egress_rules" {
     cidr_block = string
   }))
 }
+
+variable "security_group_name_tag" {}
