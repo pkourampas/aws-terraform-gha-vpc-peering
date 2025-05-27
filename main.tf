@@ -198,3 +198,37 @@ module "dr_instance" {
   }
 
 }
+
+
+
+# ----- VPC Peering -----
+data "aws_caller_identity" "peer" {       # Get the account id of peer connection
+  provider = aws.dr
+}
+
+resource "aws_vpc_peering_connection" "main_vpc_peer_requestor" {
+  vpc_id = module.vpc_main.aws_vpc_id
+  peer_vpc_id = module.vpc_dr.aws_vpc_id
+  peer_owner_id = data.aws_caller_identity.peer.account_id
+  peer_region = var.aws_dr_vpc_region
+  auto_accept = false
+  
+  tags = {
+    Side = "Requester"
+  }
+
+}
+
+resource "aws_vpc_peering_connection_accepter" "dr_vpc_peer_accepter" {
+  vpc_peering_connection_id = aws_vpc_peering_connection.main_vpc_peer_requestor.id
+  auto_accept = true
+
+  provider = {
+    aws = aws.dr
+  }
+
+  tags = {
+    Side = "Accepter"
+  }
+
+}
