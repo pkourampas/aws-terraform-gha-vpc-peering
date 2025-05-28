@@ -160,6 +160,26 @@ module "main_instance" {
 
 # ----- DR VPC EC2 Instance -----
 
+# ----- DR vpc Security Group & Instance -----
+module "dr_vpc_sg" {
+  source = "./modules/sg"
+  sg_name = "private-ec2-instance-sg"
+  sg_desc = "SG for EC2 instance in the private subnet of the dr VPC"
+  aws_vpc_id = module.vpc_dr.aws_vpc_id
+  security_group_name_tag = "dr_vpc_private_subnet_sg"
+  
+  ingress_rules = [
+    { from_port = 80, to_port = 80, ip_protocol = "tcp", cidr_block = module.main_vpc_public_subnet.subnet_cidr },
+    { from_port = 22, to_port = 22, ip_protocol = "tcp", cidr_block = module.main_vpc_public_subnet.subnet_cidr },
+    {from_port = 8, to_port = 0, ip_protocol = "icmp", cidr_block = module.main_vpc_public_subnet.subnet_cidr }    # 8 echo, 0 echo reply url: https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
+  ]
+
+  egress_rules = [
+    { from_port = 0, to_port = 0, ip_protocol = "-1", cidr_block = module.main_vpc_public_subnet.subnet_cidr }
+  ]
+}
+
+
 # --- AWS AMI FILTER ---
 data "aws_ami" "dr_vpc_latest_amazon_linux" {
   most_recent = true
@@ -188,7 +208,7 @@ module "dr_instance" {
   associate_public_ip = false
   instance_subnet = module.dr_vpc_private_subnet.subnet_id
   instance_tenancy = "default"
-  vpc_sg_group_id = [module.    main_vpc_sg.security_group_id] ## Need to create a vpc sg
+  vpc_sg_group_id = [module.dr_vpc_sg.security_group_id] ## Need to create a vpc sg
   instance_name = "dr vpc private subnet instance" 
   key_name = "my_ec2_key"
   public_key_path = "~/.ssh/id_rsa.pub"
@@ -196,7 +216,6 @@ module "dr_instance" {
   providers = {
     aws = aws.dr
   }
-
 }
 
 
