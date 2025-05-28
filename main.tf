@@ -29,6 +29,8 @@ module "vpc_dr" {
   providers = {
     aws = aws.dr
   }
+
+
 }
 
 # ----- Create Main VPC IGW -----
@@ -231,6 +233,14 @@ resource "aws_vpc_peering_connection" "main_vpc_peer_requestor" {
   peer_owner_id = data.aws_caller_identity.peer.account_id
   peer_region = var.aws_dr_vpc_region
   auto_accept = false
+
+  accepter {
+    allow_remote_vpc_dns_resolution = true
+  }
+
+  requester {
+    allow_remote_vpc_dns_resolution = true
+  }
   
   tags = {
     Side = "Requester"
