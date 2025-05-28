@@ -85,8 +85,8 @@ module "main_vpc_public_route_table" {
   aws_vpc_id = module.vpc_main.aws_vpc_id
   cidr_block = "0.0.0.0/0"
   gateway_id = module.main_vpc_igw.vpc_igw_id
-  aws_public_route_table_name = "main vpc public route table"
-  aws_public_subnet_id = module.main_vpc_public_subnet.subnet_id
+  aws_route_table_name = "main vpc public route table"
+  aws_subnet_id = module.main_vpc_public_subnet.subnet_id
   aws_route_table_id = module.main_vpc_public_route_table.route_table_id
 
   vpc_peering_cidr_block = var.aws_dr_vpc_cidr
@@ -99,8 +99,8 @@ module "dr_vpc_private_route_table" {
   aws_vpc_id = module.vpc_dr.aws_vpc_id
   cidr_block = var.aws_dr_vpc_cidr
   gateway_id = "local"
-  aws_public_route_table_name = "dr vpc private route table"
-  aws_public_subnet_id = module.dr_vpc_private_subnet.subnet_id
+  aws_route_table_name = "dr vpc private route table"
+  aws_subnet_id = module.dr_vpc_private_subnet.subnet_id
   aws_route_table_id = module.dr_vpc_private_route_table.route_table_id
 
   vpc_peering_cidr_block = var.aws_main_vpc_cidr
@@ -251,10 +251,6 @@ resource "aws_vpc_peering_connection_accepter" "dr_vpc_peer_accepter" {
   auto_accept = true
 
   accepter {
-    allow_remote_vpc_dns_resolution = true
-  }
-
-  requester {
     allow_remote_vpc_dns_resolution = true
   }
 

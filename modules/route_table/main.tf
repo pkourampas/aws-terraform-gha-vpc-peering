@@ -12,11 +12,11 @@ resource "aws_route_table" "route_table" {
   }
 
   tags = {
-    Name = var.aws_public_route_table_name
+    Name = var.aws_route_table_name
   }
 }
 
 resource "aws_route_table_association" "public_rt_association" {
-  subnet_id = var.aws_public_subnet_id
+  subnet_id = var.aws_subnet_id
   route_table_id = var.aws_route_table_id
 }
