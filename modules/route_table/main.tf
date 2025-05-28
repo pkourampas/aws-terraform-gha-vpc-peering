@@ -6,7 +6,7 @@ resource "aws_route_table" "route_table" {
     gateway_id = var.gateway_id
   }
 
-  route = {
+  route {
     cidr_block = var.vpc_peering_cidr_block
     vpc_peering_connection_id = var.vpc_peering_connection_id
   }
