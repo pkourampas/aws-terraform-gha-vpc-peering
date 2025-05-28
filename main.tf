@@ -242,9 +242,7 @@ resource "aws_vpc_peering_connection_accepter" "dr_vpc_peer_accepter" {
   vpc_peering_connection_id = aws_vpc_peering_connection.main_vpc_peer_requestor.id
   auto_accept = true
 
-  provider = {
-    aws = aws.dr
-  }
+  provider = aws.dr
 
   tags = {
     Side = "Accepter"
