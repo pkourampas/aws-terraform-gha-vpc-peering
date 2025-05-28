@@ -177,13 +177,13 @@ module "dr_vpc_sg" {
   security_group_name_tag = "dr_vpc_private_subnet_sg"
   
   ingress_rules = [
-    { from_port = 80, to_port = 80, ip_protocol = "tcp", cidr_block = var.aws_main_vpc_cidr },
-    { from_port = 22, to_port = 22, ip_protocol = "tcp", cidr_block = var.aws_main_vpc_cidr },
-    {from_port = 8, to_port = 0, ip_protocol = "icmp", cidr_block = var.aws_main_vpc_cidr }    # 8 echo, 0 echo reply url: https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
+    { from_port = 80, to_port = 80, ip_protocol = "tcp", cidr_block = module.main_vpc_public_subnet.subnet_cidr },
+    { from_port = 22, to_port = 22, ip_protocol = "tcp", cidr_block = module.main_vpc_public_subnet.subnet_cidr },
+    {from_port = 8, to_port = 0, ip_protocol = "icmp", cidr_block = module.main_vpc_public_subnet.subnet_cidr }    # 8 echo, 0 echo reply url: https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
   ]
 
   egress_rules = [
-    { from_port = 0, to_port = 0, ip_protocol = "-1", cidr_block = var.aws_main_vpc_cidr }
+    { from_port = 0, to_port = 0, ip_protocol = "-1", cidr_block = module.main_vpc_public_subnet.subnet_cidr }
   ]
 }
 
@@ -239,14 +239,6 @@ resource "aws_vpc_peering_connection" "main_vpc_peer_requestor" {
   peer_owner_id = data.aws_caller_identity.peer.account_id
   peer_region = var.aws_dr_vpc_region
   auto_accept = false
-
-  accepter {
-    allow_remote_vpc_dns_resolution = true
-  }
-
-  requester {
-    allow_remote_vpc_dns_resolution = true
-  }
   
   tags = {
     Side = "Requester"
@@ -271,5 +263,7 @@ resource "aws_vpc_peering_connection_accepter" "dr_vpc_peer_accepter" {
   tags = {
     Side = "Accepter"
   }
+
+  depends_on = [ aws_vpc_peering_connection.main_vpc_peer_requestor ]
 
 }
