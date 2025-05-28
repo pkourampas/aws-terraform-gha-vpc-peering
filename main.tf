@@ -185,6 +185,11 @@ module "dr_vpc_sg" {
   egress_rules = [
     { from_port = 0, to_port = 0, ip_protocol = "-1", cidr_block = module.main_vpc_public_subnet.subnet_cidr }
   ]
+
+  providers = {
+    aws = aws.dr
+  }
+
 }
 
 
