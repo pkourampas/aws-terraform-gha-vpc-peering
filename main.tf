@@ -88,6 +88,9 @@ module "main_vpc_public_route_table" {
   aws_public_route_table_name = "main vpc public route table"
   aws_public_subnet_id = module.main_vpc_public_subnet.subnet_id
   aws_route_table_id = module.main_vpc_public_route_table.route_table_id
+
+  vpc_peering_cidr_block = var.aws_dr_vpc_cidr
+  vpc_peering_connection_id = aws_vpc_peering_connection.main_vpc_peer_requestor.id
 }
 
 # ----- Dr vpc route table -----
@@ -99,6 +102,9 @@ module "dr_vpc_private_route_table" {
   aws_public_route_table_name = "dr vpc private route table"
   aws_public_subnet_id = module.dr_vpc_private_subnet.subnet_id
   aws_route_table_id = module.dr_vpc_private_route_table.route_table_id
+
+  vpc_peering_cidr_block = var.aws_main_vpc_cidr
+  vpc_peering_connection_id = aws_vpc_peering_connection_accepter.dr_vpc_peer_accepter.id
 
   providers = {
     aws = aws.dr
