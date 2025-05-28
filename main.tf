@@ -127,7 +127,8 @@ module "main_vpc_sg" {
   ]
 
   egress_rules = [
-    { from_port = 0, to_port = 0, ip_protocol = "-1", cidr_block = var.my_public_ipv4 }
+    { from_port = 0, to_port = 65535, ip_protocol = "tcp", cidr_block = var.my_public_ipv4 },
+    {from_port = -1, to_port = -1, ip_protocol = "icmp", cidr_block = var.my_public_ipv4 }
   ]
 }
 
@@ -183,7 +184,8 @@ module "dr_vpc_sg" {
   ]
 
   egress_rules = [
-    { from_port = 0, to_port = 0, ip_protocol = "-1", cidr_block = module.main_vpc_public_subnet.subnet_cidr }
+    { from_port = 0, to_port = 65535, ip_protocol = "tcp", cidr_block = module.main_vpc_public_subnet.subnet_cidr },
+    {from_port = 8, to_port = 0, ip_protocol = "icmp", cidr_block = module.main_vpc_public_subnet.subnet_cidr }
   ]
 
   providers = {
