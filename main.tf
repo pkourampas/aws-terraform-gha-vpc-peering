@@ -137,6 +137,53 @@ module "main_vpc_sg" {
   ]
 }
 
+# --- Main VPC NACL ---
+module "main_vpc_ps_nacl_rules" {
+  source = "./modules/nacl"
+  aws_vpc_id = module.vpc_main.aws_vpc_id
+  subnet_id = module.main_vpc_public_subnet.subnet_id
+
+  nacl_ingress_rules = [
+    { /** Ingress rule to allow access to my desktop (x.x.x.x/32) from the public subnet in the main VPC */
+      protocol = "-1"
+      rule_no = 100
+      action = "allow"
+      cidr_block = var.my_public_ipv4
+      from_port = 0
+      to_port = 0
+    },
+    { /** Ingress rule to allow access to the private subnet in DR VPC from the public subnet in the main VPC */
+      protocol = "-1"
+      rule_no = 200
+      action = "allow"
+      cidr_block = module.dr_vpc_private_subnet.subnet_cidr
+      from_port = 0
+      to_port = 0
+    }
+
+  ]
+
+  nacl_egress_rules = [
+    { /** Egress rule to allow return traffic from the public subnet in the main VPC to my desktop (x.x.x.x/32) */
+      protocol = "-1"
+      rule_no = 100
+      action = "allow"
+      cidr_block = module.dr_vpc_private_subnet.subnet_cidr
+      from_port = 0
+      to_port = 0
+    },
+    { /** Egress rule to allow return traffic from the public subnet in the main VPC to the private subnet in DR VPC */
+      protocol = "-1"
+      rule_no = 200
+      action = "allow"
+      cidr_block = var.my_public_ipv4
+      from_port = 0
+      to_port = 0
+    }
+  ]
+
+}
+
 ## ----- EC2 Instance -----
 
 # ----- AWS AMI FILTER -----
@@ -193,6 +240,41 @@ module "dr_vpc_sg" {
     { from_port = 0, to_port = 65535, ip_protocol = "tcp", cidr_block = module.main_vpc_public_subnet.subnet_cidr },
     {from_port = 8, to_port = 0, ip_protocol = "icmp", cidr_block = module.main_vpc_public_subnet.subnet_cidr },
     {from_port = -1, to_port = -1, ip_protocol = "icmp", cidr_block = module.main_vpc_public_subnet.subnet_cidr }
+  ]
+
+  providers = {
+    aws = aws.dr
+  }
+
+}
+
+# --- DR VPC NACL ---
+module "dr_vpc_private_subnet_nacl_rules" {
+  source = "./modules/nacl"
+  aws_vpc_id = module.vpc_dr.aws_vpc_id
+  subnet_id = module.dr_vpc_private_subnet.subnet_id
+
+  nacl_ingress_rules = [
+    { /** Ingress rule to allow traffic from main vpc cidr to dr vpc cidr */
+      protocol = "-1"
+      rule_no = 100
+      action = "allow"
+      cidr_block = module.main_vpc_public_subnet.subnet_cidr
+      from_port = 0
+      to_port = 0
+    }
+
+  ]
+
+  nacl_egress_rules = [
+    { /** Egress rule to allow traffic from DR VPC to Main VPC cidr */
+      protocol = "-1"
+      rule_no = 100
+      action = "allow"
+      cidr_block = module.main_vpc_public_subnet.subnet_cidr
+      from_port = 0 
+      to_port = 0
+    }
   ]
 
   providers = {
