@@ -1,0 +1,13 @@
+repos:
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.99.3  # Use latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
+    hooks:
+      - id: terraform_docs
+        args:
+          - --hook-config=--path-to-file=README.md
+          - --hook-config=--add-to-existing-file=true
+          - --hook-config=--create-file-if-not-exists=true
+          - --hook-config=--user-standard-markers=true
+          - --hook-config=--custom-marker-begin=<!-- BEGIN_Terraform_DOCS -->
+          - --hook-config=--custom-marker-end=<!-- END_Terraform_DOCS -->
+          - --hook-confg=--custom-doc-header="#"
