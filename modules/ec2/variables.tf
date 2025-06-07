@@ -11,8 +11,10 @@ variable "vpc_sg_group_id" {
   type = list(string)
 }
 variable "key_name" {
+  sensitive = true
   type = string
 }
 variable "public_key_path" {
+  sensitive = true
   type = string
 }
