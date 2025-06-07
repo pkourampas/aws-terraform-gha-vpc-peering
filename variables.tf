@@ -24,6 +24,6 @@ variable "aws_dr_vpc_cidr" {
 
 variable "my_public_ipv4" {
   type        = string
-  default     = "209.107.216.146/32"
+  default     = "x.x.x.x/32"
   description = "The public IP address of your machine, used for allowing secure access (e.g., 203.0.113.10/32)."
 }

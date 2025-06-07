@@ -1,12 +1,17 @@
 variable "sg_name" {
-  type = string
+  description = "The name of the security group"
+  type        = string
 }
 
 variable "sg_desc" {
-  type = string
+  description = "The description of the security group"
+  type        = string
 }
 
-variable "aws_vpc_id" {}
+variable "aws_vpc_id" {
+  description = "The ID of the VPC where the security group is created"
+  type        = string
+}
 
 variable "ingress_rules" {
   description = "List of ingress rules"
@@ -28,4 +33,7 @@ variable "egress_rules" {
   }))
 }
 
-variable "security_group_name_tag" {}
+variable "security_group_name_tag" {
+  description = "The Name tag for the security group"
+  type        = string
+}

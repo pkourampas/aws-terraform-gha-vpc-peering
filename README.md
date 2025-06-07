@@ -1,3 +1,75 @@
+Table of Contents
+
+- [Introduction](#introduction)
+- [Architecture Diagram](#architecture-diagram)
+- [Key pair](#key-pair)
+- [Connect to EC2 Instance](#connect-to-ec2-instance)
+- [pre-commit](#pre-commit)
+  - [pre-commit installation](#terraform-pre-commit-installation)
+  - [pre-commit dependencies installation](#pre-commit-dependencies)
+  - [pre-commit commands](#pre-commit-commands)
+- [References](#references)
+
+# Introduction
+
+This Terraform lab demonstrates how to provision a VPC peering connection between two Virtual Private Clouds (VPCs) in Amazon Web Services (AWS). VPC peering enables private network connectivity between VPCs, allowing resources in one VPC to communicate with resources in another using private IP addresses — without requiring gateways, VPNs, or internet access.
+
+# Architecture Diagram
+
+
+
+# Key pair
+
+We generate a key pair to securely authenticate SSH access to an EC2 instance without using a password. The public key is stored on the instance, and the private key remains with the user to establish a trusted, encrypted connection.
+
+```
+ssh-keygen -t rsa -b 4096
+
+# public key
+~/.ssh/id_rsa.pub
+
+# private key
+~/.ssh/id_rsa
+```
+
+# Connect to EC2 instance
+
+After successful Terraform execution, the output will display the public IP address of the EC2 instance deployed in the public subnet of the main VPC.
+
+To connect to the instance via SSH, run the following command, replacing <your-ec2-public-ip> with the actual public IP from the Terraform output:
+
+```
+ssh -i ~/.ssh/id_rsa ec2-user@<your-ec2-public-ip>
+```
+
+# pre-commit
+
+Pre-commit is a Git hook framework that runs automated checks on your code before each commit. It uses a configuration file to define which tools should scan your local repository. If any tool detects an issue—such as a misconfiguration or code that violates best practices—the commit will be blocked. This “shift-left” approach helps catch problems early, improving both code quality and security.
+
+## Terraform pre-commit installation
+
+| OS | Command |
+|----|---------|
+| Mac| brew install pre-commit |
+| Windows | pip install pre-commit |
+
+## pre-commit dependencies
+
+| dependency | url |
+|------------|-----|
+| terrform-docs | https://github.com/terraform-docs/terraform-docs |
+
+## pre-commit commands
+
+| command | description |
+|---------|-------------|
+| pre-commit run terraform_docs --all-files | Run it the first time to Generate README.md |
+| pre-commit clean | nukes the whole thing |
+| pre-commit autoupdate | Update the rev for each repository defined in your .pre-commit-config.yaml to the latest available tag in the default branch |
+
+<br>
+<br>
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -50,14 +122,34 @@
 | <a name="input_aws_dr_vpc_region"></a> [aws\_dr\_vpc\_region](#input\_aws\_dr\_vpc\_region) | The AWS region where the disaster recovery (DR) VPC will be deployed (e.g., us-west-2). | `string` | `"ca-central-1"` | no |
 | <a name="input_aws_main_vpc_cidr"></a> [aws\_main\_vpc\_cidr](#input\_aws\_main\_vpc\_cidr) | CIDR block for the main VPC (e.g., 10.0.0.0/16). | `string` | `"192.168.0.0/16"` | no |
 | <a name="input_aws_main_vpc_region"></a> [aws\_main\_vpc\_region](#input\_aws\_main\_vpc\_region) | The AWS region where the main VPC will be deployed (e.g., us-east-1). | `string` | `"us-east-1"` | no |
-| <a name="input_my_public_ipv4"></a> [my\_public\_ipv4](#input\_my\_public\_ipv4) | The public IP address of your machine, used for allowing secure access (e.g., 203.0.113.10/32). | `string` | `"209.107.216.146/32"` | no |
+| <a name="input_my_public_ipv4"></a> [my\_public\_ipv4](#input\_my\_public\_ipv4) | The public IP address of your machine, used for allowing secure access (e.g., 203.0.113.10/32). | `string` | `"x.x.x.x/32"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_dr_vpc_ec2_instance_private_ip"></a> [dr\_vpc\_ec2\_instance\_private\_ip](#output\_dr\_vpc\_ec2\_instance\_private\_ip) | n/a |
-| <a name="output_dr_vpc_instance_type"></a> [dr\_vpc\_instance\_type](#output\_dr\_vpc\_instance\_type) | n/a |
-| <a name="output_main_vpc_ec2_instance_public_ip"></a> [main\_vpc\_ec2\_instance\_public\_ip](#output\_main\_vpc\_ec2\_instance\_public\_ip) | n/a |
-| <a name="output_main_vpc_ec2_isntance_private_ip"></a> [main\_vpc\_ec2\_isntance\_private\_ip](#output\_main\_vpc\_ec2\_isntance\_private\_ip) | n/a |
+| <a name="output_dr_vpc_ec2_instance_private_ip"></a> [dr\_vpc\_ec2\_instance\_private\_ip](#output\_dr\_vpc\_ec2\_instance\_private\_ip) | The private IP address of the EC2 instance launched in the DR (Disaster Recovery) VPC |
+| <a name="output_dr_vpc_instance_type"></a> [dr\_vpc\_instance\_type](#output\_dr\_vpc\_instance\_type) | The instance type of the EC2 instance deployed in the DR VPC |
+| <a name="output_main_vpc_ec2_instance_public_ip"></a> [main\_vpc\_ec2\_instance\_public\_ip](#output\_main\_vpc\_ec2\_instance\_public\_ip) | The public IP address of the EC2 instance launched in the main VPC |
+| <a name="output_main_vpc_ec2_isntance_private_ip"></a> [main\_vpc\_ec2\_isntance\_private\_ip](#output\_main\_vpc\_ec2\_isntance\_private\_ip) | The private IP address of the EC2 instance launched in the main VPC |
 <!-- END_TF_DOCS -->
+
+
+## References
+
+- [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [Configure AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+- [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+- [AWS generate Access & Secret Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
+- [Terraform AWS VPC resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
+- [Terraform AWS Internet Gateway resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway.html)
+- [Terraform AWS Subnet resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)
+- [Terraform AWS Route Table resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table)
+- [Terraform AWS Instance resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance.html)
+- [Terraform AWS NACL resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl)
+- [Terraform AWS Security Group resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group)
+- [Terraform AWS VPC Peering resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection)
+- [Generate key pair](https://learn.microsoft.com/en-us/viva/glint/setup/sftp-ssh-key-gen)
+- [Pre-commit](https://pre-commit.com)
+- [Terraform pre-commit](https://github.com/antonbabenko/pre-commit-terraform)
+- [Install pre-commit dependencies](https://github.com/antonbabenko/pre-commit-terraform?tab=readme-ov-file#1-install-dependencies)

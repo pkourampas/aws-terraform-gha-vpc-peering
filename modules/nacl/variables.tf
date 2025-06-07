@@ -1,5 +1,5 @@
 variable "aws_vpc_id" {
-  description = "The ID of the VPC"
+  description = "The ID of the VPC where the network access control list is created"
   type        = string
 }
 
