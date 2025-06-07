@@ -8,6 +8,10 @@ repos:
           - --hook-config=--add-to-existing-file=true
           - --hook-config=--create-file-if-not-exists=true
           - --hook-config=--user-standard-markers=true
-          - --hook-config=--custom-marker-begin=<!-- BEGIN_Terraform_DOCS -->
-          - --hook-config=--custom-marker-end=<!-- END_Terraform_DOCS -->
-          - --hook-confg=--custom-doc-header="#"
+          - --hook-config=--custom-marker-begin=BEGIN_TF_DOCS
+          - --hook-config=--custom-marker-end=END_TF_DOCS
+          - --hook-config=--custom-doc-header=#
+      - id: terraform_fmt
+      - id: terraform_tflint
+      - id: terraform_validate
+      - id: terraform_tfsec
