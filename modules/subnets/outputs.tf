@@ -7,7 +7,7 @@ output "subnet_cidr" {
 }
 
 output "subnet_vpc_assignment" {
-  value = aws_subnet.subnet.vpc_id  
+  value = aws_subnet.subnet.vpc_id
 }
 
 output "subnet_id" {

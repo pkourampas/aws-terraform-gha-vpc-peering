@@ -12,6 +12,6 @@ repos:
           - --hook-config=--custom-marker-end=END_TF_DOCS
           - --hook-config=--custom-doc-header=#
       - id: terraform_fmt
-      - id: terraform_tflint
+        args:
+          - --args=-recursive
       - id: terraform_validate
-      - id: terraform_tfsec

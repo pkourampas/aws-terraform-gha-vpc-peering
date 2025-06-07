@@ -7,7 +7,7 @@ resource "aws_route_table" "route_table" {
   }
 
   route {
-    cidr_block = var.vpc_peering_cidr_block
+    cidr_block                = var.vpc_peering_cidr_block
     vpc_peering_connection_id = var.vpc_peering_connection_id
   }
 
@@ -17,6 +17,6 @@ resource "aws_route_table" "route_table" {
 }
 
 resource "aws_route_table_association" "public_rt_association" {
-  subnet_id = var.aws_subnet_id
+  subnet_id      = var.aws_subnet_id
   route_table_id = var.aws_route_table_id
 }

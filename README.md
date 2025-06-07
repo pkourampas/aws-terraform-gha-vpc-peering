@@ -46,11 +46,11 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_aws_dr_vpc_cidr"></a> [aws\_dr\_vpc\_cidr](#input\_aws\_dr\_vpc\_cidr) | n/a | `string` | `"172.20.0.0/16"` | no |
-| <a name="input_aws_dr_vpc_region"></a> [aws\_dr\_vpc\_region](#input\_aws\_dr\_vpc\_region) | n/a | `string` | `"ca-central-1"` | no |
-| <a name="input_aws_main_vpc_cidr"></a> [aws\_main\_vpc\_cidr](#input\_aws\_main\_vpc\_cidr) | n/a | `string` | `"192.168.0.0/16"` | no |
-| <a name="input_aws_main_vpc_region"></a> [aws\_main\_vpc\_region](#input\_aws\_main\_vpc\_region) | n/a | `string` | `"us-east-1"` | no |
-| <a name="input_my_public_ipv4"></a> [my\_public\_ipv4](#input\_my\_public\_ipv4) | n/a | `string` | `"209.107.216.146/32"` | no |
+| <a name="input_aws_dr_vpc_cidr"></a> [aws\_dr\_vpc\_cidr](#input\_aws\_dr\_vpc\_cidr) | CIDR block for the disaster recovery (DR) VPC (e.g., 10.1.0.0/16). | `string` | `"172.20.0.0/16"` | no |
+| <a name="input_aws_dr_vpc_region"></a> [aws\_dr\_vpc\_region](#input\_aws\_dr\_vpc\_region) | The AWS region where the disaster recovery (DR) VPC will be deployed (e.g., us-west-2). | `string` | `"ca-central-1"` | no |
+| <a name="input_aws_main_vpc_cidr"></a> [aws\_main\_vpc\_cidr](#input\_aws\_main\_vpc\_cidr) | CIDR block for the main VPC (e.g., 10.0.0.0/16). | `string` | `"192.168.0.0/16"` | no |
+| <a name="input_aws_main_vpc_region"></a> [aws\_main\_vpc\_region](#input\_aws\_main\_vpc\_region) | The AWS region where the main VPC will be deployed (e.g., us-east-1). | `string` | `"us-east-1"` | no |
+| <a name="input_my_public_ipv4"></a> [my\_public\_ipv4](#input\_my\_public\_ipv4) | The public IP address of your machine, used for allowing secure access (e.g., 203.0.113.10/32). | `string` | `"209.107.216.146/32"` | no |
 
 ## Outputs
 

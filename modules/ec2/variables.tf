@@ -1,6 +1,6 @@
 variable "instance_ami" {}
 variable "associate_public_ip" {
-    type = bool
+  type = bool
 }
 variable "instance_az" {}
 variable "instance_type" {}
@@ -12,9 +12,9 @@ variable "vpc_sg_group_id" {
 }
 variable "key_name" {
   sensitive = true
-  type = string
+  type      = string
 }
 variable "public_key_path" {
   sensitive = true
-  type = string
+  type      = string
 }
