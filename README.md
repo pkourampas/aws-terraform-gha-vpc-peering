@@ -2,6 +2,12 @@ Table of Contents
 
 - [Introduction](#introduction)
 - [Architecture Diagram](#architecture-diagram)
+- [Rquirements](#requirements)
+- [Providers](#providers)
+- [Modules](#modules)
+- [Resources](#resources)
+- [Inputs](#inputs)
+- [Outputs](#outputs)
 - [Key pair](#key-pair)
 - [Connect to EC2 Instance](#connect-to-ec2-instance)
 - [pre-commit](#pre-commit)
@@ -16,56 +22,6 @@ This Terraform lab demonstrates how to provision a VPC peering connection betwee
 
 # Architecture Diagram
 
-
-
-# Key pair
-
-We generate a key pair to securely authenticate SSH access to an EC2 instance without using a password. The public key is stored on the instance, and the private key remains with the user to establish a trusted, encrypted connection.
-
-```
-ssh-keygen -t rsa -b 4096
-
-# public key
-~/.ssh/id_rsa.pub
-
-# private key
-~/.ssh/id_rsa
-```
-
-# Connect to EC2 instance
-
-After successful Terraform execution, the output will display the public IP address of the EC2 instance deployed in the public subnet of the main VPC.
-
-To connect to the instance via SSH, run the following command, replacing <your-ec2-public-ip> with the actual public IP from the Terraform output:
-
-```
-ssh -i ~/.ssh/id_rsa ec2-user@<your-ec2-public-ip>
-```
-
-# pre-commit
-
-Pre-commit is a Git hook framework that runs automated checks on your code before each commit. It uses a configuration file to define which tools should scan your local repository. If any tool detects an issue—such as a misconfiguration or code that violates best practices—the commit will be blocked. This “shift-left” approach helps catch problems early, improving both code quality and security.
-
-## Terraform pre-commit installation
-
-| OS | Command |
-|----|---------|
-| Mac| brew install pre-commit |
-| Windows | pip install pre-commit |
-
-## pre-commit dependencies
-
-| dependency | url |
-|------------|-----|
-| terrform-docs | https://github.com/terraform-docs/terraform-docs |
-
-## pre-commit commands
-
-| command | description |
-|---------|-------------|
-| pre-commit run terraform_docs --all-files | Run it the first time to Generate README.md |
-| pre-commit clean | nukes the whole thing |
-| pre-commit autoupdate | Update the rev for each repository defined in your .pre-commit-config.yaml to the latest available tag in the default branch |
 
 <br>
 <br>
@@ -134,6 +90,56 @@ Pre-commit is a Git hook framework that runs automated checks on your code befor
 | <a name="output_main_vpc_ec2_isntance_private_ip"></a> [main\_vpc\_ec2\_isntance\_private\_ip](#output\_main\_vpc\_ec2\_isntance\_private\_ip) | The private IP address of the EC2 instance launched in the main VPC |
 <!-- END_TF_DOCS -->
 
+<br>
+
+# Key pair
+
+We generate a key pair to securely authenticate SSH access to an EC2 instance without using a password. The public key is stored on the instance, and the private key remains with the user to establish a trusted, encrypted connection.
+
+```
+ssh-keygen -t rsa -b 4096
+
+# public key
+~/.ssh/id_rsa.pub
+
+# private key
+~/.ssh/id_rsa
+```
+
+# Connect to EC2 instance
+
+After successful Terraform execution, the output will display the public IP address of the EC2 instance deployed in the public subnet of the main VPC.
+
+To connect to the instance via SSH, run the following command, replacing <your-ec2-public-ip> with the actual public IP from the Terraform output:
+
+```
+ssh -i ~/.ssh/id_rsa ec2-user@<your-ec2-public-ip>
+```
+
+# pre-commit
+
+Pre-commit is a Git hook framework that runs automated checks on your code before each commit. It uses a configuration file to define which tools should scan your local repository. If any tool detects an issue—such as a misconfiguration or code that violates best practices—the commit will be blocked. This “shift-left” approach helps catch problems early, improving both code quality and security.
+
+## Terraform pre-commit installation
+
+| OS | Command |
+|----|---------|
+| Mac| brew install pre-commit |
+| Windows | pip install pre-commit |
+
+## pre-commit dependencies
+
+| dependency | url |
+|------------|-----|
+| terrform-docs | https://github.com/terraform-docs/terraform-docs |
+
+## pre-commit commands
+
+| command | description |
+|---------|-------------|
+| pre-commit run terraform_docs --all-files | Run it the first time to Generate README.md |
+| pre-commit clean | nukes the whole thing |
+| pre-commit autoupdate | Update the rev for each repository defined in your .pre-commit-config.yaml to the latest available tag in the default branch |
 
 ## References
 
@@ -141,6 +147,7 @@ Pre-commit is a Git hook framework that runs automated checks on your code befor
 - [Configure AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 - [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 - [AWS generate Access & Secret Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
+- [Setting up the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)
 - [Terraform AWS VPC resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
 - [Terraform AWS Internet Gateway resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway.html)
 - [Terraform AWS Subnet resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)
