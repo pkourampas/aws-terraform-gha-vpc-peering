@@ -2,18 +2,23 @@ Table of Contents
 
 - [Introduction](#introduction)
 - [Architecture Diagram](#architecture-diagram)
-- [Rquirements](#requirements)
-- [Providers](#providers)
-- [Modules](#modules)
-- [Resources](#resources)
-- [Inputs](#inputs)
-- [Outputs](#outputs)
-- [Key pair](#key-pair)
+- [Terraform Module Documentation](#terraform-module-documentation)
+  - [Rquirements](#requirements)
+  - [Providers](#providers)
+  - [Modules](#modules)
+  - [Resources](#resources)
+  - [Inputs](#inputs)
+  - [Outputs](#outputs)
+  - [Key pair](#key-pair)
 - [Connect to EC2 Instance](#connect-to-ec2-instance)
 - [pre-commit](#pre-commit)
   - [pre-commit installation](#terraform-pre-commit-installation)
   - [pre-commit dependencies installation](#pre-commit-dependencies)
   - [pre-commit commands](#pre-commit-commands)
+- [Execution](#execution)
+  - [Execution Prerequisites](#exec-prerequisites)
+  - [Setup Steps](#setup-steps)
+  - [Additional Notes](#additional-notes)
 - [References](#references)
 
 # Introduction
@@ -23,8 +28,12 @@ This Terraform lab demonstrates how to provision a VPC peering connection betwee
 # Architecture Diagram
 
 
+
+
 <br>
 <br>
+
+# Terraform Module Documentation
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -141,13 +150,82 @@ Pre-commit is a Git hook framework that runs automated checks on your code befor
 | pre-commit clean | nukes the whole thing |
 | pre-commit autoupdate | Update the rev for each repository defined in your .pre-commit-config.yaml to the latest available tag in the default branch |
 
+# Execution
+
+To successfully execute this Terraform project, please ensure you meet the following prerequisites and follow the setup steps below.
+
+## Exec Prerequisites
+
+Before you begin, make sure you have the following installed and configured on your local machine:
+
+- [Create an AWS Account](https://aws.amazon.com/)
+- Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
+- Install [Terraform](https://developer.hashicorp.com/terraform/downloads)
+- Install [Git](https://git-scm.com/downloads)
+- Install [Visual Studio Code](https://code.visualstudio.com/)
+
+## Setup Steps
+
+Once the above prerequisites are in place, follow these steps to set up and run the project:
+
+1. **[Fork the repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)** to your GitHub account.
+2. **Create an IAM user** in AWS and generate an **Access Key ID** and **Secret Access Key**.
+
+```
+Assign the following AWS managed policies to the user:
+  - AmazonEC2FullAccess
+  - AmazonVPCFullAccess
+```
+
+3. **Configure AWS CLI** with the credentials:
+
+```
+bash
+  aws configure 
+```
+
+4. Generate a key pair (with default names) in AWS EC2 or using the CLI. Make sure the private key is stored securely.
+5. Update the my_public_ipv4 variable in the root module with your current public IP address.
+6. Clone your forked repository and navigate to the project directory:
+
+```
+bash
+  git clone https://github.com/<your-username>/<your-forked-repo>.git
+  cd <your-forked-repo>
+```
+
+7. Initialize Terraform:
+
+```
+terraform init
+```
+
+8. Review the planned changes:
+
+```
+terraform plan
+```
+
+9. Apply the configuration:
+
+```
+terraform apply
+```
+
+## Additional Notes
+
+Terraform format and validate will automatically run on each commit to enforce code quality and consistency.
+
 ## References
 
+- [Create an AWS Account](https://aws.amazon.com/resources/create-account/)
+- [Install Git](https://git-scm.com/downloads)
+- [Install Visual Studio Code](https://code.visualstudio.com/download)
 - [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - [Configure AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
-- [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 - [AWS generate Access & Secret Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
-- [Setting up the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)
+- [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+- [Terraform Workflow](https://developer.hashicorp.com/terraform/intro/core-workflow)
 - [Terraform AWS VPC resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
 - [Terraform AWS Internet Gateway resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway.html)
 - [Terraform AWS Subnet resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)
