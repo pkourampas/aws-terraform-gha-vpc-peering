@@ -27,8 +27,7 @@ This Terraform lab demonstrates how to provision a VPC peering connection betwee
 
 # Architecture Diagram
 
-
-
+![VPC Peering Architecture Diagram](./Architecture_diagram/VPC_Peering.jpg)
 
 <br>
 <br>
