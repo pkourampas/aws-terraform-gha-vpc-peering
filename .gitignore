@@ -10,3 +10,6 @@
 
 # Notes file
 *.txt
+
+# Ignore AWS Policies for STS
+aws_policies/
