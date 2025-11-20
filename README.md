@@ -20,6 +20,9 @@ Table of Contents
   - [Setup Steps](#setup-steps)
   - [Additional Notes](#additional-notes)
 - [References](#references)
+- [Versions](#versions)
+
+<br>
 
 # Introduction
 
@@ -86,7 +89,7 @@ This Terraform lab demonstrates how to provision a VPC peering connection betwee
 | <a name="input_aws_dr_vpc_region"></a> [aws\_dr\_vpc\_region](#input\_aws\_dr\_vpc\_region) | The AWS region where the disaster recovery (DR) VPC will be deployed (e.g., us-west-2). | `string` | `"ca-central-1"` | no |
 | <a name="input_aws_main_vpc_cidr"></a> [aws\_main\_vpc\_cidr](#input\_aws\_main\_vpc\_cidr) | CIDR block for the main VPC (e.g., 10.0.0.0/16). | `string` | `"192.168.0.0/16"` | no |
 | <a name="input_aws_main_vpc_region"></a> [aws\_main\_vpc\_region](#input\_aws\_main\_vpc\_region) | The AWS region where the main VPC will be deployed (e.g., us-east-1). | `string` | `"us-east-1"` | no |
-| <a name="input_my_public_ipv4"></a> [my\_public\_ipv4](#input\_my\_public\_ipv4) | The public IP address of your machine, used for allowing secure access (e.g., 203.0.113.10/32). | `string` | `"x.x.x.x/32"` | no |
+| <a name="input_my_public_ipv4"></a> [my\_public\_ipv4](#input\_my\_public\_ipv4) | The public IP address of your machine, used for allowing secure access (e.g., 203.0.113.10/32). | `string` | `"x.x.x.x/32"` | yes |
 
 ## Outputs
 
@@ -237,3 +240,12 @@ Terraform format and validate will automatically run on each commit to enforce c
 - [Pre-commit](https://pre-commit.com)
 - [Terraform pre-commit](https://github.com/antonbabenko/pre-commit-terraform)
 - [Install pre-commit dependencies](https://github.com/antonbabenko/pre-commit-terraform?tab=readme-ov-file#1-install-dependencies)
+
+<br>
+
+## Versions
+
+| Apps         | Version |
+|--------------|---------|
+| Terraform    | v1.3.9  |
+| pre-commit   | 4.2.0   |
