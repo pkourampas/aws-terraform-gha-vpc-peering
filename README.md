@@ -21,6 +21,7 @@ Table of Contents
   - [Additional Notes](#additional-notes)
 - [References](#references)
 - [Versions](#versions)
+- [Notice](#notice)
 
 <br>
 
@@ -249,3 +250,10 @@ Terraform format and validate will automatically run on each commit to enforce c
 |--------------|---------|
 | Terraform    | v1.3.9  |
 | pre-commit   | 4.2.0   |
+
+
+## Notice
+
+This project is provided for learning and training purposes only.
+Forking is allowed for personal use.
+Pull requests and issues are not accepted.
